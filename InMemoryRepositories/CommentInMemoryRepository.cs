@@ -3,9 +3,33 @@ using RepositoryContracts;
 
 namespace InMemoryRepositories;
 
-public class CommentInMemoryRepository :  ICommentRepository
+public class CommentInMemoryRepository : ICommentRepository
 {
-    private readonly List<Comment> comments = new();
+    private readonly List<Comment> comments = new()
+    {
+        new Comment
+        {
+            Id = 1,
+            Body = "This is a great post!",
+            UserId = 2,
+            PostId = 1
+        },
+        new Comment
+        {
+            Id = 2,
+            Body = "Good luck learning C#!",
+            UserId = 1,
+            PostId = 2
+        },
+        new Comment
+        {
+            Id = 3,
+            Body = "Hello and welcome!",
+            UserId = 3,
+            PostId = 1
+        }
+    };
+
     public Task<Comment> AddAsync(Comment comment)
     {
         comment.Id = comments.Any()
@@ -19,12 +43,15 @@ public class CommentInMemoryRepository :  ICommentRepository
 
     public Task UpdateAsync(Comment comment)
     {
-        Comment? existingComment = comments.SingleOrDefault(c => c.Id == comment.Id);
+        Comment? existingComment = comments.SingleOrDefault(
+            c => c.Id == comment.Id
+        );
 
         if (existingComment is null)
         {
             throw new InvalidOperationException(
-                $"Comment with ID '{comment.Id}' not found");
+                $"Comment with ID '{comment.Id}' not found"
+            );
         }
 
         comments.Remove(existingComment);
@@ -35,12 +62,15 @@ public class CommentInMemoryRepository :  ICommentRepository
 
     public Task DeleteAsync(int id)
     {
-        Comment? commentToRemove = comments.SingleOrDefault(c => c.Id == id);
+        Comment? commentToRemove = comments.SingleOrDefault(
+            c => c.Id == id
+        );
 
         if (commentToRemove is null)
         {
             throw new InvalidOperationException(
-                $"Comment with ID '{id}' not found");
+                $"Comment with ID '{id}' not found"
+            );
         }
 
         comments.Remove(commentToRemove);
@@ -50,12 +80,15 @@ public class CommentInMemoryRepository :  ICommentRepository
 
     public Task<Comment> GetSingleAsync(int id)
     {
-        Comment? comment = comments.SingleOrDefault(c => c.Id == id);
+        Comment? comment = comments.SingleOrDefault(
+            c => c.Id == id
+        );
 
         if (comment is null)
         {
             throw new InvalidOperationException(
-                $"Comment with ID '{id}' not found");
+                $"Comment with ID '{id}' not found"
+            );
         }
 
         return Task.FromResult(comment);
