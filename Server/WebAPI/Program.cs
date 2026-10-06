@@ -1,8 +1,15 @@
+using FileRepositories;
+using RepositoryContracts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddControllers();
+builder.Services.AddScoped<IPostRepository, PostFileRepository>();
+builder.Services.AddScoped<IUserRepository, UserFileRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentFileRepository>();
 
 var app = builder.Build();
 
@@ -34,6 +41,7 @@ app.MapGet("/weatherforecast", () =>
     .WithName("GetWeatherForecast");
 
 app.Run();
+app.MapControllers();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
